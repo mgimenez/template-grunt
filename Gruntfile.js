@@ -134,6 +134,18 @@ module.exports = function(grunt) {
             }
         },
 
+        imagemin: {
+            dynamic: {
+                files: [{
+                    expand: true,
+                    cwd: path.src + '/images/',
+                    src: ['**/*.{png,jpg,gif}'],
+                    dest: 'dist/images/'
+                }]
+            }
+        },
+
+
         /**
          * Create a local server form dist directory
          */
@@ -175,6 +187,14 @@ module.exports = function(grunt) {
                     spawn: false,
                 },
             },
+
+            image: {
+                files: [path.src + '/**/*.{png,jpg,gif}'],
+                tasks: ['imagemin'],
+                options: {
+                    spawn: false,
+                },
+            },
         }
 
     });
@@ -190,10 +210,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
 
-    grunt.registerTask('dist', ['clean', 'sass', 'jshint', 'copy']);
-    grunt.registerTask('dev', ['dist', 'connect', 'watch']);
-    grunt.registerTask('build', ['clean', 'sass', 'cssmin', 'jshint', 'concat', 'uglify', 'copy:html', 'processhtml']);
+    grunt.registerTask('dist', ['clean', 'sass', 'jshint', 'imagemin', 'copy']);
+    grunt.registerTask('dev', ['dist', 'connect', 'imagemin', 'watch']);
+    grunt.registerTask('build', ['clean', 'sass', 'cssmin', 'jshint', 'concat', 'uglify', 'copy:html', 'imagemin', 'processhtml']);
 
 
 };
